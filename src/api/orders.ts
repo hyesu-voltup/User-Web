@@ -29,8 +29,8 @@ export async function postOrder(productId: string | number, quantity: number): P
 }
 
 /**
- * GET /api/v1/orders/me/{userId} 응답 항목 - 내 주문 내역
- * status 없으면 기본 "확인" (어드민 거부 시 등)
+ * GET /api/v1/orders/me/{userId} 응답 항목 - 내 주문 내역 (API 명세: Camel Case)
+ * status 없으면 기본 "확인"
  */
 export type OrderHistoryItem = {
   orderId: number
@@ -41,27 +41,33 @@ export type OrderHistoryItem = {
   status: string
 }
 
-type OrderHistoryItemRaw = OrderHistoryItem | {
+/** 백엔드 응답 (Camel 또는 Snake Case) → 매핑으로 OrderHistoryItem 통일 */
+type OrderHistoryItemRaw = {
+  orderId?: number
   order_id?: number
+  productName?: string
   product_name?: string
   quantity?: number
+  usedPoint?: number
   used_point?: number
+  orderedAt?: string
   ordered_at?: string
   status?: string
 }
 
 function toOrderHistoryItem(raw: OrderHistoryItemRaw): OrderHistoryItem {
-  const orderId = Number((raw as OrderHistoryItemRaw).orderId ?? (raw as OrderHistoryItemRaw).order_id ?? 0)
-  const productName = String((raw as OrderHistoryItemRaw).productName ?? (raw as OrderHistoryItemRaw).product_name ?? '')
-  const quantity = Number(raw?.quantity ?? 0)
-  const usedPoint = Number((raw as OrderHistoryItemRaw).usedPoint ?? (raw as OrderHistoryItemRaw).used_point ?? 0)
-  const orderedAt = String((raw as OrderHistoryItemRaw).orderedAt ?? (raw as OrderHistoryItemRaw).ordered_at ?? '')
-  const status = String((raw as OrderHistoryItemRaw).status ?? '확인')
-  return { orderId, productName, quantity, usedPoint, orderedAt, status }
+  return {
+    orderId: Number(raw.orderId ?? raw.order_id ?? 0),
+    productName: String(raw.productName ?? raw.product_name ?? ''),
+    quantity: Number(raw.quantity ?? 0),
+    usedPoint: Number(raw.usedPoint ?? raw.used_point ?? 0),
+    orderedAt: String(raw.orderedAt ?? raw.ordered_at ?? ''),
+    status: String(raw.status ?? '확인'),
+  }
 }
 
 /**
- * 내 주문 내역 조회
+ * 내 주문 내역 조회. 응답을 Camel Case OrderHistoryItem[] 로 반환
  */
 export async function fetchMyOrders(userId: string): Promise<OrderHistoryItem[]> {
   const { data } = await apiClient.get<OrderHistoryItemRaw[]>(`/v1/orders/me/${encodeURIComponent(userId)}`)
