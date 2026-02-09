@@ -1,7 +1,7 @@
 import { apiClient } from './client'
 
 /**
- * GET /api/v1/points/me 응답 타입
+ * GET /api/v1/points/me 응답 타입 (앱 내부 통일용)
  * - 현재 가용 잔액과 7일 이내 만료 예정 포인트
  */
 export type PointsMeResponse = {
@@ -11,16 +11,19 @@ export type PointsMeResponse = {
   expiringPoint: number
 }
 
-/** 백엔드가 snake_case로 올 수 있으므로 통일해서 반환 */
+/** API 실제 응답: availableBalance, expiringWithin7Days 등 */
 type PointsMeRaw = PointsMeResponse | {
+  availableBalance?: number
+  expiringWithin7Days?: number
   available_point?: number
   expiring_point?: number
 }
 
 function normalizePointsMe(raw: PointsMeRaw): PointsMeResponse {
+  const r = raw as PointsMeRaw
   return {
-    availablePoint: raw.availablePoint ?? raw.available_point ?? 0,
-    expiringPoint: raw.expiringPoint ?? raw.expiring_point ?? 0,
+    availablePoint: Number(r.availableBalance ?? r.availablePoint ?? r.available_point ?? 0),
+    expiringPoint: Number(r.expiringWithin7Days ?? r.expiringPoint ?? r.expiring_point ?? 0),
   }
 }
 

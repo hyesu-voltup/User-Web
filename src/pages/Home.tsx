@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
-import { CircleDot, Gift } from 'lucide-react'
+import { Gift } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
 import { usePointsMe } from '../hooks/usePointsMe'
 import { PointsSkeleton } from '../components/PointsSkeleton'
+import { RouletteSection } from '../components/RouletteSection'
 
 /**
- * 사용자 홈 화면
- * - 상단: 닉네임 + GET /api/v1/points/me 가용 잔액 강조, 7일 이내 만료 예정 소량 표시
- * - 중앙: 룰렛 돌리러 가기 / 인기 상품 보기 카드 배너
+ * 홈 (룰렛 포함)
+ * 상단: 닉네임 + 가용 잔액, 7일 만료 예정
+ * 중앙: 룰렛 섹션
+ * 하단: 인기 상품 보기 바로가기
  */
 export default function Home() {
   const { nickname } = useAuth()
@@ -36,11 +38,10 @@ export default function Home() {
           </p>
         )}
         {!isPending && !isError && (
-          <p className="text-3xl font-bold text-brand tabular-nums">
+          <p className="text-3xl font-bold text-content tabular-nums">
             {availablePoint.toLocaleString()}P
           </p>
         )}
-        {/* 7일 이내 만료 예정: 작게 표시해 활동 유도 */}
         {!isPending && !isError && expiringPoint > 0 && (
           <p className="mt-2 text-xs text-content-secondary">
             7일 이내 만료 예정 <span className="font-medium text-amber-600">{expiringPoint.toLocaleString()}P</span>
@@ -54,25 +55,16 @@ export default function Home() {
         )}
       </section>
 
-      {/* 중앙: 바로가기 배너 카드 */}
-      <section className="grid grid-cols-1 gap-4" aria-label="바로가기">
-        <Link
-          to="/roulette"
-          className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-tabbar-border shadow-sm hover:border-brand/30 hover:shadow transition-all active:scale-[0.99]"
-        >
-          <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-light text-brand">
-            <CircleDot className="w-6 h-6" aria-hidden />
-          </span>
-          <div className="flex-1 text-left">
-            <p className="font-semibold text-content">룰렛 돌리러 가기</p>
-            <p className="text-xs text-content-secondary">당일 1회, 포인트를 받아보세요</p>
-          </div>
-        </Link>
+      {/* 룰렛 */}
+      <RouletteSection />
+
+      {/* 바로가기: 상품 목록 */}
+      <section className="mt-8" aria-label="바로가기">
         <Link
           to="/products"
           className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-tabbar-border shadow-sm hover:border-brand/30 hover:shadow transition-all active:scale-[0.99]"
         >
-          <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-light text-brand">
+          <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-light text-content">
             <Gift className="w-6 h-6" aria-hidden />
           </span>
           <div className="flex-1 text-left">

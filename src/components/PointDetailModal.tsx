@@ -72,7 +72,7 @@ export function PointDetailModal({ userId, onClose }: Props) {
           {!loading && !error && data && (
             <>
               <p className="text-content-secondary text-sm">총 잔액</p>
-              <p className="text-xl font-bold text-brand tabular-nums mt-1">
+              <p className="text-xl font-bold text-content tabular-nums mt-1">
                 {data.totalBalance.toLocaleString()}P
               </p>
               <p className="mt-4 text-content-secondary text-sm">적립/사용 내역</p>

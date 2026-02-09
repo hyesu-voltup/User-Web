@@ -1,16 +1,15 @@
 import { NavLink } from 'react-router-dom'
-import { Home, CircleDot, Gift, User } from 'lucide-react'
+import { Home, Wallet, Gift, ListOrdered } from 'lucide-react'
 
 const tabs = [
-  { to: '/', label: '홈', icon: Home },
-  { to: '/roulette', label: '룰렛', icon: CircleDot },
-  { to: '/products', label: '상품', icon: Gift },
-  { to: '/my', label: '내 정보', icon: User },
+  { to: '/', label: '홈(룰렛)', icon: Home },
+  { to: '/my', label: '내 포인트', icon: Wallet },
+  { to: '/products', label: '상품 목록', icon: Gift },
+  { to: '/orders', label: '주문 내역', icon: ListOrdered },
 ] as const
 
 /**
- * 하단 탭바 (내비게이션)
- * [홈, 룰렛, 상품, 내 정보] - lucide-react 아이콘 사용
+ * 하단 탭바: 홈(룰렛), 내 포인트, 상품 목록, 주문 내역
  */
 export function TabBar() {
   return (
@@ -25,7 +24,7 @@ export function TabBar() {
           className={({ isActive }) =>
             `flex flex-col items-center justify-center gap-1 min-w-[64px] py-1 rounded-lg transition-colors ${
               isActive
-                ? 'text-tabbar-active'
+                ? 'bg-brand-light text-content'
                 : 'text-tabbar-inactive hover:text-content-secondary'
             }`
           }

@@ -117,7 +117,7 @@ export function ProductDetailModal({ product, onClose }: Props) {
             disabled={isOutOfStock || loading}
             className="w-full py-3 rounded-xl bg-brand text-content font-medium hover:bg-brand-hover disabled:opacity-50 disabled:pointer-events-none"
           >
-            {isOutOfStock ? '품절' : loading ? '처리 중...' : '구매하기'}
+            {isOutOfStock ? '품절' : loading ? '구매 중입니다.' : '구매하기'}
           </button>
         </div>
       </div>
