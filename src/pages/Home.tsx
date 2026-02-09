@@ -16,8 +16,8 @@ export default function Home() {
   const { data: points, isPending, isError, error } = usePointsMe()
 
   const displayName = nickname?.trim() ? `${nickname}님` : '회원'
-  const availablePoint = points?.availablePoint ?? 0
-  const expiringPoint = points?.expiringPoint ?? 0
+  const availableBalance = points?.availableBalance ?? 0
+  const expiringWithin7Days = points?.expiringWithin7Days ?? 0
 
   return (
     <div className="py-6">
@@ -39,16 +39,16 @@ export default function Home() {
         )}
         {!isPending && !isError && (
           <p className="text-3xl font-bold text-content tabular-nums">
-            {availablePoint.toLocaleString()}P
+            {availableBalance.toLocaleString()}P
           </p>
         )}
-        {!isPending && !isError && expiringPoint > 0 && (
+        {!isPending && !isError && expiringWithin7Days > 0 && (
           <p className="mt-2 text-xs text-content-secondary">
-            7일 이내 만료 예정 <span className="font-medium text-amber-600">{expiringPoint.toLocaleString()}P</span>
+            7일 이내 만료 예정 <span className="font-medium text-amber-600">{expiringWithin7Days.toLocaleString()}P</span>
             &nbsp;· 사용하시면 좋아요!
           </p>
         )}
-        {!isPending && !isError && expiringPoint === 0 && (
+        {!isPending && !isError && expiringWithin7Days === 0 && (
           <p className="mt-2 text-xs text-content-muted">
             7일 이내 만료 예정 포인트 없음
           </p>

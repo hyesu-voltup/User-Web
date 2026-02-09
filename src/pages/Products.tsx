@@ -14,7 +14,7 @@ export default function Products() {
   const { data: points } = usePointsMe()
   const [selected, setSelected] = useState<Product | null>(null)
 
-  const availablePoint = points?.availablePoint ?? 0
+  const availableBalance = points?.availableBalance ?? 0
 
   return (
     <div className="py-6">
@@ -41,9 +41,9 @@ export default function Products() {
       {!isLoading && !isError && products.length > 0 && (
         <ul className="mt-6 grid grid-cols-2 gap-3">
           {products.map((product) => {
-            const price = product.price ?? 0
+            const pointPrice = product.pointPrice ?? 0
             const stock = product.stock ?? 0
-            const canAfford = availablePoint >= price
+            const canAfford = availableBalance >= pointPrice
             const isAvailable = stock > 0 && canAfford
             return (
               <li key={product.id}>
@@ -66,7 +66,7 @@ export default function Products() {
                   )}
                   <p className="mt-2 font-medium text-content line-clamp-2">{product.name ?? ''}</p>
                   <p className="mt-1 text-sm text-content-secondary">
-                    {(product.price ?? 0).toLocaleString()}P
+                    {(product.pointPrice ?? 0).toLocaleString()}P
                   </p>
                   {(product.stock ?? 0) <= 0 ? (
                     <p className="mt-1 text-xs text-red-600">품절</p>

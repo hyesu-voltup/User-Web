@@ -9,7 +9,7 @@ export type RouletteStatusResponse = {
 }
 
 /**
- * POST /api/v1/roulette/participate 응답
+ * POST /api/v1/roulette/participate 응답 (명세: grantedPoint)
  */
 export type RouletteParticipateResponse = {
   grantedPoint: number
@@ -28,15 +28,11 @@ export async function getRouletteStatus(): Promise<RouletteStatusResponse> {
   }
 }
 
-/** 응답이 snake_case일 수 있음 */
-type RouletteParticipateRaw = RouletteParticipateResponse | { granted_point?: number }
-
 /**
  * 룰렛 참여 (당일 1인 1회). 서버 락으로 응답이 지연될 수 있음
  * @returns Promise<RouletteParticipateResponse> - grantedPoint로 결과 표시
  */
 export async function postRouletteParticipate(): Promise<RouletteParticipateResponse> {
-  const { data } = await apiClient.post<RouletteParticipateRaw>('/v1/roulette/participate')
-  const point = data?.grantedPoint ?? (data as RouletteParticipateRaw)?.granted_point ?? 0
-  return { grantedPoint: point }
+  const { data } = await apiClient.post<RouletteParticipateResponse>('/v1/roulette/participate')
+  return data ?? { grantedPoint: 0 }
 }

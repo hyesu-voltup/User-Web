@@ -22,10 +22,10 @@ export function ProductDetailModal({ product, onClose }: Props) {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
 
-  const price = product.price ?? 0
+  const pointPrice = product.pointPrice ?? 0
   const stock = product.stock ?? 0
   const maxQty = Math.max(1, stock)
-  const totalPrice = price * quantity
+  const totalPrice = pointPrice * quantity
   const isOutOfStock = stock <= 0
 
   const handlePurchase = async () => {
@@ -70,7 +70,7 @@ export function ProductDetailModal({ product, onClose }: Props) {
             />
           )}
           <p className="mt-3 text-content-secondary text-sm">
-            {price.toLocaleString()}P / 1개
+            {pointPrice.toLocaleString()}P / 1개
           </p>
           <p className="mt-1 text-content-muted text-xs">
             재고 {stock}개
