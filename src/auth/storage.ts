@@ -1,8 +1,9 @@
 /**
- * 로그인 사용자 식별자 저장 키
+ * 로그인 사용자 식별자·닉네임 저장 키
  * localStorage 키 충돌 방지를 위해 앱 전용 prefix 사용
  */
 const USER_ID_STORAGE_KEY = 'lg_voltup_user_id'
+const NICKNAME_STORAGE_KEY = 'lg_voltup_nickname'
 
 /**
  * localStorage에 저장된 userId 조회
@@ -34,6 +35,41 @@ export function setStoredUserId(userId: string): void {
 export function clearStoredUserId(): void {
   try {
     localStorage.removeItem(USER_ID_STORAGE_KEY)
+  } catch {
+    // no-op
+  }
+}
+
+/**
+ * localStorage에 저장된 닉네임 조회 (로그인 시 저장)
+ * @returns 닉네임 또는 null
+ */
+export function getStoredNickname(): string | null {
+  try {
+    return localStorage.getItem(NICKNAME_STORAGE_KEY)
+  } catch {
+    return null
+  }
+}
+
+/**
+ * 로그인 성공 시 닉네임 저장 (홈 상단 표시용)
+ * @param nickname - 사용자가 입력한 닉네임
+ */
+export function setStoredNickname(nickname: string): void {
+  try {
+    localStorage.setItem(NICKNAME_STORAGE_KEY, nickname)
+  } catch {
+    // no-op
+  }
+}
+
+/**
+ * 로그아웃 시 저장된 닉네임 제거
+ */
+export function clearStoredNickname(): void {
+  try {
+    localStorage.removeItem(NICKNAME_STORAGE_KEY)
   } catch {
     // no-op
   }

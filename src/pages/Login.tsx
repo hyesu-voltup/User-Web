@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
-import { apiClient } from '../api/client'
+import { postAuthLogin } from '../api/auth'
 
 /**
  * 로그인 페이지
- * 닉네임만 입력하여 접속하고, 서버에서 받은 userId로 세션 유지
+ * 닉네임만 입력. POST /api/v1/auth/login(간편 로그인) 호출 — 없으면 자동 생성 후 userId 반환
  */
 export default function Login() {
   const [nickname, setNickname] = useState('')
@@ -26,12 +26,9 @@ export default function Login() {
     }
     setLoading(true)
     try {
-      const { data } = await apiClient.post<{ userId: string }>(
-        '/v1/auth/login',
-        { nickname: trimmed }
-      )
+      const data = await postAuthLogin(trimmed)
       if (data?.userId) {
-        login(data.userId)
+        login(data.userId, trimmed)
         navigate(returnUrl, { replace: true })
       } else {
         setError('로그인 정보를 받지 못했습니다.')
@@ -80,7 +77,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-brand text-white font-medium hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl bg-brand text-content font-medium hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '로그인 중...' : '시작하기'}
             </button>

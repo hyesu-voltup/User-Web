@@ -2,10 +2,17 @@ import axios, { type AxiosInstance } from 'axios'
 import { getStoredUserId } from '../auth/storage'
 
 /**
- * API 베이스 URL (환경변수 또는 기본값)
- * 보안: 실제 운영에서는 .env로 관리 권장
+ * API 베이스 URL
+ * - 개발(DEV): 항상 '/api' → Vite 프록시가 백엔드로 전달해 CORS 없이 요청
+ * - 프로덕션: .env의 VITE_API_BASE_URL 사용 (백엔드가 CORS 허용해야 함)
  */
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api'
+function getBaseURL(): string {
+  if (import.meta.env.DEV) return '/api'
+  const raw = (import.meta.env.VITE_API_BASE_URL ?? '').toString().trim().replace(/\/+$/, '')
+  if (!raw) return '/api'
+  return raw.endsWith('/api') ? raw : `${raw}/api`
+}
+const BASE_URL = getBaseURL()
 
 /**
  * X-User-Id 헤더를 붙인 Axios 인스턴스
