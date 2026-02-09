@@ -24,3 +24,13 @@ Next.js 14+ 또는 React 18+ (Vite), TypeScript, Tailwind, TanStack Query
 상품 구매 (POST /api/v1/orders): 구매 시 포인트 부족(C005)이나 재고 부족(C006)에 대한 예외 처리가 필수입니다.
 
 내 주문 내역 (GET /api/v1/orders/me/{userId}): 본인이 구매한 상품 리스트를 확인합니다.
+
+---
+
+## Vercel 배포
+
+1. 저장소를 Vercel에 연결 후 Deploy.
+2. **Environment Variables**에 아래 추가 (프로덕션용).
+   - **Name**: `VITE_API_BASE_URL`
+   - **Value**: 백엔드 API 베이스 URL (예: `https://voltupbe.onrender.com` — 끝 `/` 제외 권장)
+3. 재배포 후 적용됨. (`.env`는 로컬용이며 Vercel에는 반영되지 않음)

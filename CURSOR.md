@@ -269,4 +269,3 @@ API 명세(Swagger)와 실제 요청 형식 불일치를 의심하고 수정할 
 | 인증 | AuthContext + localStorage (userId, nickname) |
 
 ---
-
