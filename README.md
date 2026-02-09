@@ -30,7 +30,7 @@ Next.js 14+ 또는 React 18+ (Vite), TypeScript, Tailwind, TanStack Query
 ## Vercel 배포
 
 1. 저장소를 Vercel에 연결 후 Deploy.
-2. **Environment Variables**에 아래 추가 (프로덕션용).
-   - **Name**: `VITE_API_BASE_URL`
-   - **Value**: 백엔드 API 베이스 URL (예: `https://voltupbe.onrender.com` — 끝 `/` 제외 권장)
-3. 재배포 후 적용됨. (`.env`는 로컬용이며 Vercel에는 반영되지 않음)
+2. **Environment Variables** (프로덕션용)
+   - **VITE_API_BASE_URL** (선택): 백엔드 API 베이스 URL (예: `https://voltupbe.onrender.com`). 없으면 기본값 사용.
+   - **VITE_USE_API_PROXY** (권장): `true` 로 설정하면 요청을 Vercel 도메인 `/api` 로 보내고, `vercel.json` 의 rewrite 가 백엔드로 프록시해 **CORS 없이** 동작합니다.
+3. CORS 에러가 나는 경우: **VITE_USE_API_PROXY=true** 로 설정 후 재배포. (`.env`는 로컬용이며 Vercel에는 반영되지 않음)
